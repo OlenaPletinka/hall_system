@@ -1,4 +1,4 @@
-package com.hall_system.hall.entity;
+package com.hall_system.reservation_system.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,12 +11,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Hall {
+public class Seats {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @ManyToOne
+  @JoinColumn(name = "hall_id", referencedColumnName = "id")
+  private Hall hall;
 
   @Column
   private Integer seatNumber;
-
 }
