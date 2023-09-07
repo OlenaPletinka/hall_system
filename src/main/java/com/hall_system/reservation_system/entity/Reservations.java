@@ -22,6 +22,10 @@ public class Reservations {
  @JoinColumn(name = "seats_id", referencedColumnName = "id")
   private Seats seats;
 
+ @OneToOne
+ @JoinColumn(name = "event_id", referencedColumnName = "id")
+ private Event event;
+
  @Column
   private  String reservedBy;
 
