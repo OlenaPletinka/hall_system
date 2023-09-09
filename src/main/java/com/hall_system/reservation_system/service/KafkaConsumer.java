@@ -1,6 +1,5 @@
 package com.hall_system.reservation_system.service;
 
-import com.hall_system.reservation_system.dto.ReservationDto;
 import com.hall_system.reservation_system.entity.Reservations;
 import com.hall_system.reservation_system.utils.AppConstants;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ public class KafkaConsumer {
   @KafkaListener(topics = AppConstants.RESERVATION_CREATION_TOPIC, groupId = AppConstants.RESERVATION_CREATION_GROUP_ID)
   public void consumeReservation(List<LinkedHashMap> dtos){
     LOGGER.info(String.format("Message with %d reservations was received.", dtos.size()));
-    List<Reservations> reservations = messageProcessorService.convertToReservations(dtos);
+    List<Reservations> reservations = messageProcessorService.convertMessageToReservations(dtos);
     reservationService.createReservations(reservations);
   }
 }
