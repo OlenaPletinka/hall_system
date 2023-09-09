@@ -13,31 +13,18 @@ import java.util.List;
 
 @Service
 public class MessageProcessorServiceImpl implements MessageProcessorService{
-  private final EventService eventService;
-  private final SeatsService seatsService;
+  private final Convertor convertor;
 
   @Autowired
-  public MessageProcessorServiceImpl(EventService eventService, SeatsService seatsService) {
-    this.eventService = eventService;
-    this.seatsService = seatsService;
+  public MessageProcessorServiceImpl(Convertor convertor) {
+    this.convertor = convertor;
   }
 
   @Override
-  public List<Reservations> convertToReservations(List<LinkedHashMap> dtos) {
+  public List<Reservations> convertMessageToReservations(List<LinkedHashMap> dtos) {
     List<Reservations>reservations = new ArrayList<>();
     for (LinkedHashMap dto:dtos){
-      Reservations reservation = new Reservations();
-      String eventName = (String) dto.get("eventName");
-      List<Integer>list = (List<Integer>) dto.get("eventTime");
-      LocalDateTime eventTime = LocalDateTime.of(list.get(0), list.get(1), list.get(2), list.get(3),
-                list.get(4));
-      Event event = eventService.findByEventNameAndTime(eventName, eventTime);
-      reservation.setEvent(event);
-      Seats seats = seatsService.findSeatsBySeatsNumberAndHall((Integer) dto.get("seatsNumber"), event.getHall());
-      reservation.setSeats(seats);
-      reservation.setReservedBy((String) dto.get("reservedBy"));
-
-      reservations.add(reservation);
+      reservations.add(convertor.convertMessageDtoToReservations(dto));
     }
     return reservations;
   }
